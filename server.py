@@ -5,7 +5,8 @@ import os
 import operator
 import threading
 
-new_dict = {} 
+new_dict = {}
+
 class Client(threading.Thread):
 	lock = threading.Lock()
 
@@ -16,28 +17,31 @@ class Client(threading.Thread):
  
 	def run(self): 
 		(ipofclient,port) = self.clientaddress
-		
+		'''
 		while True:
-			filename = open("/home/jarvis/Documents/Docker/out.txt","w")
-			data = self.conn.recv(10)
-			if str(data) == "b''":
-				break
-			data = str(data)
-			data = data[2:-1]
-			print(ipofclient + " " + data)
-			
-			new_dict[ipofclient]=data
+		'''
+		filename = open("/home/harshit/Desktop/mini_project docs/codes/threads/out.txt","w")
+		data = self.conn.recv(10)
+		#if str(data) == "b''":
+			#data = "100"
+			#new_dict[ipofclient] = data
+			#break
 
-			Client.lock.acquire()
-			print(len(new_dict))
-			sorted_dict = sorted(new_dict.items(), key=operator.itemgetter(1))
-			for key,value in sorted_dict:
-				filename.write(key + " " + value + "\n")
-			#filename.close()
-			Client.lock.release()	
+		data = str(data)
+		data = data[2:-1]
+		print(ipofclient + " " + data)
+	
+		new_dict[ipofclient]=data
+		Client.lock.acquire()
+		print(len(new_dict))
+		sorted_dict = sorted(new_dict.items(), key=operator.itemgetter(1))
+		for key,value in sorted_dict:
+			filename.write(key + " " + value + "\n")
+		Client.lock.release()	
 		
+
 sock = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-server_address=("172.31.84.165",9994)
+server_address=("172.31.84.177",10001)
 sock.bind(server_address)
 sock.listen(10)
 
